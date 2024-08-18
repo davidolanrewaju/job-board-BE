@@ -47,14 +47,27 @@ export class JobsService {
   }
 
   async update(id: string, jobData: Partial<CreateJobDto>): Promise<Job> {
-    await this.jobRepository.update(id, jobData);
+    const { company, ...jobDetails } = jobData;
+
+    if (company) {
+      const job = await this.jobRepository.findOne({
+        where: { id },
+        relations: ['company'],
+      });
+      if (job && job.company) {
+        await this.companyRepository.update(job.company.id, company);
+      }
+    }
+
+    await this.jobRepository.update(id, jobDetails);
+
     return this.jobRepository.findOne({
       where: { id },
       relations: ['company'],
     });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.jobRepository.delete(id);
   }
 }

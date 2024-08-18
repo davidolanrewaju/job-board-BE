@@ -12,7 +12,7 @@ import { JobsService } from './jobs.service';
 import { Job } from './entities/job.entity';
 import { CreateJobDto } from './dto/create-job.dto';
 
-@ApiTags('jobs')
+@ApiTags('Jobs')
 @Controller('jobs')
 export class JobsController {
   constructor(private jobsService: JobsService) {}
@@ -60,6 +60,6 @@ export class JobsController {
   @ApiOperation({ summary: 'Delete a job' })
   @ApiResponse({ status: 200, description: 'The job has been deleted' })
   remove(@Param('id') id: string): Promise<void> {
-    return this.jobsService.remove(+id);
+    return this.jobsService.remove(id);
   }
 }
